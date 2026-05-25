@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexicaForge – Free Word Unscrambler, Anagram Solver & Word Finder</title>
+<meta name="description" content="LexicaForge is a free online word tool. Unscramble letters, solve anagrams, find words by pattern, and look up definitions instantly. No signup required.">
+<meta name="keywords" content="word unscrambler, anagram solver, word finder, scrabble helper, wordle solver, english dictionary, unscramble letters">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="LexicaForge – Free Word Unscrambler & Anagram Solver">
+<meta property="og:description" content="Find all words from scrambled letters. Free anagram solver, word pattern finder, and English dictionary.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://lexicaforge.com/">
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "LexicaForge",
+  "description": "Free word unscrambler, anagram solver, and word finder tool",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a18;--paper:#f7f4ee;--cream:#ede9df;--cream2:#e5e0d5;
+  --gold:#b8860b;--gold-light:#f5edc0;--gold-mid:#d4a820;
+  --rust:#8b3a1e;--sage:#3d6b35;--muted:#6b6860;
+  --border:rgba(26,26,24,0.13);--border2:rgba(26,26,24,0.22);
+  --white:#ffffff;--red:#c0392b;--green:#2d7a3a;
+  --ad-bg:#f0ede6;
+  --shadow:0 2px 12px rgba(26,26,24,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;font-size:15px;line-height:1.6}
+
+/* ── NAV ─────────────────────────────────────── */
+.site-nav{background:var(--ink);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--paper);text-decoration:none;letter-spacing:-0.3px}
+.nav-logo span{color:var(--gold-mid)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{color:rgba(247,244,238,0.7);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.03em;transition:color 0.15s}
+.nav-links a:hover{color:var(--paper)}
+.nav-menu-btn{display:none;background:none;border:none;cursor:pointer;color:var(--paper);font-size:22px}
+
+/* ── HERO ────────────────────────────────────── */
+.hero{text-align:center;padding:48px 24px 36px;border-bottom:1px solid var(--border)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:4px 14px;border-radius:2px;margin-bottom:16px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,58px);font-weight:900;line-height:1.05;letter-spacing:-1px;margin-bottom:12px}
+.hero h1 .accent{color:var(--gold)}
+.hero-sub{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 24px;line-height:1.65}
+.hero-features{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.hero-tag{font-size:12px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:20px;color:var(--muted);background:var(--white)}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.site-main{flex:1}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+.content-with-sidebar{display:grid;grid-template-columns:1fr 220px;gap:28px;padding:28px 0 40px;align-items:start}
+@media(max-width:760px){.content-with-sidebar{grid-template-columns:1fr}.sidebar{order:99}}
+
+/* ── TOOL AREA ───────────────────────────────── */
+.tool-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.tool-tabs{display:flex;background:var(--cream);border-bottom:1px solid var(--border)}
+.tab-btn{flex:1;padding:11px 6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;letter-spacing:0.02em;border-bottom:2px solid transparent}
+.tab-btn.active{color:var(--ink);border-bottom-color:var(--gold);background:var(--white)}
+.tab-btn:not(.active):hover{background:var(--cream2);color:var(--ink)}
+.tool-panel{display:none;padding:24px}
+.tool-panel.active{display:block}
+.input-label{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+.main-input{width:100%;font-family:'DM Mono',monospace;font-size:clamp(22px,4vw,30px);font-weight:500;letter-spacing:0.15em;text-transform:uppercase;border:none;border-bottom:2px solid var(--border);padding:6px 0 10px;background:transparent;color:var(--ink);outline:none;text-align:center;transition:border-color 0.2s}
+.main-input:focus{border-bottom-color:var(--gold)}
+.main-input::placeholder{color:#ccc;font-size:clamp(18px,3vw,24px)}
+.letter-tiles{display:flex;justify-content:center;gap:5px;margin:14px 0 4px;flex-wrap:wrap;min-height:44px}
+.tile{width:40px;height:40px;background:var(--cream);border:1.5px solid var(--border2);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--ink);text-transform:uppercase;position:relative;flex-shrink:0}
+.tile-score{font-size:8px;color:var(--muted);position:absolute;bottom:3px;right:4px;font-family:'DM Mono',monospace}
+.options-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.opt-select{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--cream);color:var(--ink);cursor:pointer;outline:none;flex-shrink:0}
+.opt-select:focus{border-color:var(--gold)}
+.solve-btn{flex:1;min-width:130px;padding:10px 18px;background:var(--ink);color:var(--paper);border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;gap:7px}
+.solve-btn:hover{opacity:0.82}
+.solve-btn:disabled{opacity:0.4;cursor:not-allowed}
+.spinner{width:14px;height:14px;border:2px solid rgba(247,244,238,0.3);border-top-color:var(--paper);border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pattern-help{font-size:12px;color:var(--muted);margin-top:10px;padding:8px 12px;background:var(--cream);border-radius:5px;line-height:1.6}
+
+/* ── RESULTS ─────────────────────────────────── */
+.results-area{margin-top:20px;min-height:40px}
+.results-header{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.results-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700}
+.results-meta{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
+.length-group{margin-bottom:16px}
+.length-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.words-grid{display:flex;flex-wrap:wrap;gap:6px}
+.word-chip{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:5px 10px;background:var(--cream);border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all 0.12s;color:var(--ink);user-select:none;position:relative}
+.word-chip:hover{background:var(--gold-light);border-color:var(--gold);color:var(--rust)}
+.word-chip.high-score{border-color:var(--gold-mid);background:var(--gold-light);color:var(--rust)}
+.score-badge{font-size:9px;opacity:0.65}
+
+/* ── DEFINITION CARD ─────────────────────────── */
+.def-card{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:18px 20px;margin-top:16px}
+.def-word-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px}
+.def-meta{font-size:13px;color:var(--muted);margin-bottom:10px;font-style:italic}
+.def-phonetic{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-left:8px;font-style:normal}
+.def-meaning{font-size:14px;line-height:1.7;margin-bottom:8px}
+.def-example{font-size:13px;color:var(--muted);font-style:italic;padding-left:12px;border-left:2px solid var(--cream2);margin-top:6px}
+.def-synonyms{font-size:12px;color:var(--muted);margin-top:8px}
+.def-synonyms a{color:var(--rust);text-decoration:none;cursor:pointer}
+.def-synonyms a:hover{text-decoration:underline}
+.scrabble-pill{display:inline-block;background:var(--gold-light);color:var(--rust);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:3px 9px;border-radius:3px;margin-top:10px}
+.def-source{font-size:11px;color:var(--muted);margin-top:8px}
+.def-source a{color:var(--muted)}
+
+/* ── EMPTY / ERROR ───────────────────────────── */
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted)}
+.empty-glyph{font-family:'Playfair Display',serif;font-size:56px;color:var(--cream2);display:block;margin-bottom:8px;line-height:1}
+.empty-state p{font-size:14px}
+.error-msg{background:#fff5f5;border:1px solid #fca5a5;border-radius:6px;padding:12px 14px;font-size:13px;color:var(--red);margin-top:12px}
+
+/* ── AD SLOTS ────────────────────────────────── */
+.ad-slot{background:var(--ad-bg);border:1px dashed var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:0.05em}
+.ad-slot-leaderboard{width:100%;height:90px;margin:20px 0}
+.ad-slot-rectangle{width:100%;height:250px;margin-bottom:20px;position:sticky;top:68px}
+.ad-slot-inline{width:100%;height:100px;margin:24px 0}
+
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar-section{margin-bottom:20px}
+.sidebar-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.tip-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px}
+.tip-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.tip-text{font-size:12px;color:var(--muted);line-height:1.6}
+.quick-link{display:block;font-size:12px;color:var(--ink);text-decoration:none;padding:5px 0;border-bottom:1px solid var(--border);transition:color 0.12s}
+.quick-link:last-child{border-bottom:none}
+.quick-link:hover{color:var(--gold)}
+
+/* ── SEO CONTENT ─────────────────────────────── */
+.seo-section{background:var(--white);border-top:1px solid var(--border);padding:44px 0}
+.seo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:40px}
+.seo-card{padding:20px;border:1px solid var(--border);border-radius:10px;background:var(--white)}
+.seo-card-icon{font-size:22px;margin-bottom:10px}
+.seo-card h2{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.seo-card p{font-size:13px;color:var(--muted);line-height:1.65}
+.seo-prose h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:12px;margin-top:32px}
+.seo-prose h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:8px;margin-top:20px;color:var(--ink)}
+.seo-prose p{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:12px}
+.seo-prose ul{font-size:14px;color:var(--muted);line-height:1.75;padding-left:20px;margin-bottom:12px}
+
+/* ── FOOTER ──────────────────────────────────── */
+.site-footer{background:var(--ink);color:rgba(247,244,238,0.65);font-size:13px;padding:40px 24px 24px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:28px;max-width:960px;margin:0 auto 32px}
+.footer-col-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--paper);margin-bottom:12px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:7px}
+.footer-col ul a{color:rgba(247,244,238,0.65);text-decoration:none;transition:color 0.12s;font-size:13px}
+.footer-col ul a:hover{color:var(--paper)}
+.footer-bottom{max-width:960px;margin:0 auto;padding-top:20px;border-top:1px solid rgba(247,244,238,0.1);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.footer-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--paper)}
+.footer-logo span{color:var(--gold-mid)}
+.footer-copy{font-size:12px;color:rgba(247,244,238,0.4)}
+
+/* ── MODAL (Privacy / Terms) ─────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,26,24,0.55);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:12px;max-width:680px;width:100%;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(26,26,24,0.25)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border)}
+.modal-head h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:700}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;padding:2px 6px}
+.modal-close:hover{color:var(--ink)}
+.modal-body{overflow-y:auto;padding:24px;font-size:14px;line-height:1.75;color:var(--muted)}
+.modal-body h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--ink);margin:20px 0 8px}
+.modal-body h3:first-child{margin-top:0}
+.modal-body p{margin-bottom:10px}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media(max-width:600px){
+  .nav-links{display:none}
+  .hero{padding:32px 16px 24px}
+  .tab-btn{font-size:11px;padding:9px 4px}
+  .main-input{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav" aria-label="Main navigation">
+  <a href="/" class="nav-logo">Lexica<span>Forge</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="#unscramble">Unscramble</a></li>
+    <li><a href="#anagram">Anagram</a></li>
+    <li><a href="#wordfinder">Word Finder</a></li>
+    <li><a href="#define">Define</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-eyebrow">✦ Free Word Tools</div>
+  <h1>The Word Solver<br>You've Been <span class="accent">Missing</span></h1>
+  <p class="hero-sub">Unscramble letters, crack anagrams, solve crossword patterns, and look up definitions — all in one place. Free, fast, no signup.</p>
+  <div class="hero-features">
+    <span class="hero-tag">✓ Scrabble Helper</span>
+    <span class="hero-tag">✓ Wordle Solver</span>
+    <span class="hero-tag">✓ Crossword Aid</span>
+    <span class="hero-tag">✓ Words With Friends</span>
+    <span class="hero-tag">✓ Real Dictionary</span>
+  </div>
+</header>
+
+<!-- TOP AD LEADERBOARD -->
+<div class="container">
+  <div class="ad-slot ad-slot-leaderboard" aria-label="Advertisement">
+    <span>Advertisement</span>
+    <span style="font-size:10px;opacity:0.6">728×90 Leaderboard</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="site-main">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- TOOL -->
+      <div>
+        <div class="tool-card" id="tool" aria-label="Word solving tool">
+          <div class="tool-tabs" role="tablist">
+            <button class="tab-btn active" onclick="switchTab('unscramble',this)" role="tab" id="tab-unscramble" aria-selected="true">Unscramble</button>
+            <button class="tab-btn" onclick="switchTab('anagram',this)" role="tab" id="tab-anagram" aria-selected="false">Anagram</button>
+            <button class="tab-btn" onclick="switchTab('wordfinder',this)" role="tab" id="tab-wordfinder" aria-selected="false">Word Finder</button>
+            <button class="tab-btn" onclick="switchTab('define',this)" role="tab" id="tab-define" aria-selected="false">Define</button>
+          </div>
+
+          <!-- UNSCRAMBLE -->
+          <section class="tool-panel active" id="panel-unscramble" aria-labelledby="tab-unscramble">
+            <label class="input-label" for="inp-unscramble">Enter scrambled letters</label>
+            <div class="letter-tiles" id="tiles-unscramble" aria-hidden="true"></div>
+            <input class="main-input" id="inp-unscramble" placeholder="E.G. AELPP" maxlength="15"
+              autocomplete="off" autocorrect="off" spellcheck="false"
+              oninput="updateTiles(this.value,'tiles-unscramble')"
+              onkeydown="if(event.key==='Enter')solve('unscramble')">
+            <div class="options-row">
+              <select class="opt-select" id="len-unscramble" aria-label="Filter by word length">
+                <option value="">Any length</option>
+                <option value="2">2 letters</option>
+                <option value="3">3 letters</option>
+                <option value="4">4 letters</option>
+                <option value="5">5 letters</option>
+                <option value="6">6 letters</option>
+                <option value="7">7+ letters</option>
+              </select>
+              <button class="solve-btn" id="btn-unscramble" onclick="solve('unscramble')">
+                <div class="spinner" id="spin-unscramble" aria-hidden="true"></div>
+                <span id="btxt-unscramble">Unscramble →</span>
+              </button>
+            </div>
+            <div class="results-area" id="res-unscramble" role="region" aria-live="polite">
+              <div class="empty-state"><span class="empty-glyph">A</span><p>Enter letters above and click Unscramble</p></div>
+            </div>
+          </section>
+
+          <!-- ANAGRAM -->
+          <section class="tool-panel" id="panel-anagram" aria-labelledby="tab-anagram">
+            <label class="input-label" for="inp-anagram">Enter word or letters</label>
+            <input class="main-input" id="inp-anagram" placeholder="E.G. LISTEN" maxlength="15"
+              autocomplete="off" autocorrect="off" spellcheck="false"
+              onkeydown="if(event.key==='Enter')solve('anagram')">
+            <div class="options-row">
+              <select class="opt-select" id="mode-anagram" aria-label="Anagram mode">
+                <option value="full">Full anagrams only</option>
+                <option value="partial">Include partial</option>
+              </select>
+              <button class="solve-btn" id="btn-anagram" onclick="solve('anagram')">
+                <div class="spinner" id="spin-anagram" aria-hidden="true"></div>
+                <span id="btxt-anagram">Find Anagrams →</span>
+              </button>
+            </div>
+            <div class="results-area" id="res-anagram" role="region" aria-live="polite">
+              <div class="empty-state"><span class="empty-glyph">≈</span><p>Find words made from the same letters</p></div>
+            </div>
+          </section>
+
+          <!-- WORD FINDER -->
+          <section class="tool-panel" id="panel-wordfinder" aria-labelledby="tab-wordfinder">
+            <label class="input-label" for="inp-wordfinder">Word pattern (? = any letter)</label>
+            <input class="main-input" id="inp-wordfinder" placeholder="E.G. C?T" maxlength="20"
+              autocomplete="off" autocorrect="off" spellcheck="false"
+              style="letter-spacing:0.1em"
+              onkeydown="if(event.key==='Enter')solve('wordfinder')">
+            <p class="pattern-help"><strong>?</strong> = one unknown letter &nbsp;·&nbsp; <strong>*</strong> = any sequence of letters<br>Examples: <code>TH?NK</code> → THINK / THANK &nbsp;·&nbsp; <code>S*ING</code> → SING, SWING, STING…</p>
+            <div class="options-row">
+              <button class="solve-btn" id="btn-wordfinder" onclick="solve('wordfinder')">
+                <div class="spinner" id="spin-wordfinder" aria-hidden="true"></div>
+                <span id="btxt-wordfinder">Find Words →</span>
+              </button>
+            </div>
+            <div class="results-area" id="res-wordfinder" role="region" aria-live="polite">
+              <div class="empty-state"><span class="empty-glyph">?</span><p>Enter a pattern to discover matching words</p></div>
+            </div>
+          </section>
+
+          <!-- DEFINE -->
+          <section class="tool-panel" id="panel-define" aria-labelledby="tab-define">
+            <label class="input-label" for="inp-define">Look up any English word</label>
+            <input class="main-input" id="inp-define" placeholder="E.G. EPHEMERAL" maxlength="30"
+              autocomplete="off" autocorrect="off" spellcheck="false"
+              onkeydown="if(event.key==='Enter')solve('define')">
+            <div class="options-row">
+              <button class="solve-btn" id="btn-define" onclick="solve('define')">
+                <div class="spinner" id="spin-define" aria-hidden="true"></div>
+                <span id="btxt-define">Define Word →</span>
+              </button>
+            </div>
+            <div class="results-area" id="res-define" role="region" aria-live="polite">
+              <div class="empty-state"><span class="empty-glyph">Ω</span><p>Full definitions, phonetics, and etymology</p></div>
+            </div>
+          </section>
+        </div><!-- /tool-card -->
+
+        <!-- INLINE AD -->
+        <div class="ad-slot ad-slot-inline" aria-label="Advertisement">
+          <span>Advertisement</span>
+          <span style="font-size:10px;opacity:0.6">728×90 Inline Ad</span>
+        </div>
+
+        <!-- SEO FEATURE GRID -->
+        <div class="seo-grid" style="margin-top:8px">
+          <div class="seo-card">
+            <div class="seo-card-icon">🔤</div>
+            <h2>Word Unscrambler</h2>
+            <p>Turn any jumble of letters into valid English words instantly. Works for Scrabble, Wordle, and daily puzzles.</p>
+          </div>
+          <div class="seo-card">
+            <div class="seo-card-icon">↔️</div>
+            <h2>Anagram Solver</h2>
+            <p>Discover hidden anagrams — words built from the exact same letters rearranged in a new order.</p>
+          </div>
+          <div class="seo-card">
+            <div class="seo-card-icon">🔍</div>
+            <h2>Pattern Word Finder</h2>
+            <p>Search by pattern using wildcards. Essential for crossword solvers and vocabulary builders.</p>
+          </div>
+          <div class="seo-card">
+            <div class="seo-card-icon">📖</div>
+            <h2>English Dictionary</h2>
+            <p>Definitions, phonetics, parts of speech, and example sentences powered by Free Dictionary API.</p>
+          </div>
+        </div>
+      </div><!-- /main col -->
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Sidebar">
+        <!-- Sidebar ad -->
+        <div class="ad-slot ad-slot-rectangle" aria-label="Advertisement">
+          <span>Advertisement</span>
+          <span style="font-size:10px;opacity:0.6">300×250 Rectangle</span>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="sidebar-section">
+          <div class="sidebar-title">Popular Searches</div>
+          <a class="quick-link" href="#" onclick="quickSearch('unscramble','AELPP')">Unscramble AELPP</a>
+          <a class="quick-link" href="#" onclick="quickSearch('unscramble','TERALS')">Unscramble TERALS</a>
+          <a class="quick-link" href="#" onclick="quickSearch('anagram','LISTEN')">Anagrams of LISTEN</a>
+          <a class="quick-link" href="#" onclick="quickSearch('anagram','SILENT')">Anagrams of SILENT</a>
+          <a class="quick-link" href="#" onclick="quickSearch('wordfinder','?IGHT')">Words ending ?IGHT</a>
+          <a class="quick-link" href="#" onclick="quickSearch('define','serendipity')">Define SERENDIPITY</a>
+        </div>
+
+        <!-- Tips -->
+        <div class="sidebar-section">
+          <div class="sidebar-title">Tips</div>
+          <div class="tip-card">
+            <div class="tip-title">High-value Scrabble letters</div>
+            <div class="tip-text">Q(10), Z(10), J(8), X(8) are worth the most points. Words containing these are highlighted in gold.</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div><!-- /container -->
+
+  <!-- SEO PROSE SECTION -->
+  <section class="seo-section" id="about">
+    <div class="container">
+      <article class="seo-prose">
+        <h2>How to Use LexicaForge</h2>
+        <p>LexicaForge is a free, browser-based English word tool that helps you solve word puzzles, improve your vocabulary, and dominate word games. No account, no download, no cost — just enter your letters and go.</p>
+
+        <h3>Word Unscrambler</h3>
+        <p>Type any combination of letters (up to 15) into the Unscramble tab and click the button. LexicaForge will find every valid English word that can be formed using those letters. Results are sorted by length and marked with Scrabble point values. Click any word to instantly see its definition.</p>
+
+        <h3>Anagram Solver</h3>
+        <p>An anagram uses exactly the same letters as the original word, rearranged. For example, LISTEN and SILENT are anagrams. The Anagram tab offers two modes: "full anagrams" (uses all letters exactly once) and "partial anagrams" (allows using a subset of letters).</p>
+
+        <h3>Word Pattern Finder</h3>
+        <p>The Word Finder tab is ideal for crossword and Wordle players. Use <strong>?</strong> for a single unknown letter and <strong>*</strong> for any string of letters. For example, entering <code>TH?NK</code> will find THINK and THANK, while <code>S*ING</code> will find SING, SWING, STING, SPRING, and more.</p>
+
+        <h3>English Dictionary</h3>
+        <p>Look up any English word to get its definition, phonetic pronunciation, part of speech, and example usage sentences — all powered by the Free Dictionary API with no API key required.</p>
+
+        <h3>Scrabble Point Values</h3>
+        <ul>
+          <li><strong>1 point:</strong> A, E, I, O, U, L, N, S, T, R</li>
+          <li><strong>2 points:</strong> D, G</li>
+          <li><strong>3 points:</strong> B, C, M, P</li>
+          <li><strong>4 points:</strong> F, H, V, W, Y</li>
+          <li><strong>5 points:</strong> K</li>
+          <li><strong>8 points:</strong> J, X</li>
+          <li><strong>10 points:</strong> Q, Z</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-col-title">LexicaForge</div>
+      <p style="font-size:13px;line-height:1.65;color:rgba(247,244,238,0.55)">A free online word solver for Scrabble, Wordle, crosswords, and vocabulary building.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Tools</div>
+      <ul>
+        <li><a href="#" onclick="switchTabByName('unscramble')">Word Unscrambler</a></li>
+        <li><a href="#" onclick="switchTabByName('anagram')">Anagram Solver</a></li>
+        <li><a href="#" onclick="switchTabByName('wordfinder')">Word Finder</a></li>
+        <li><a href="#" onclick="switchTabByName('define')">Dictionary</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Resources</div>
+      <ul>
+        <li><a href="#about">How It Works</a></li>
+        <li><a href="#about">Scrabble Values</a></li>
+        <li><a href="#" onclick="openModal('privacy');return false">Privacy Policy</a></li>
+        <li><a href="#" onclick="openModal('terms');return false">Terms of Use</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Word Games</div>
+      <ul>
+        <li><a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener">Wordle</a></li>
+        <li><a href="https://www.hasbro.com/en-us/brands/scrabble" target="_blank" rel="noopener">Scrabble</a></li>
+        <li><a href="https://www.wordswithfriends.com" target="_blank" rel="noopener">Words With Friends</a></li>
+        <li><a href="https://www.nytimes.com/puzzles/spelling-bee" target="_blank" rel="noopener">Spelling Bee</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-logo">Lexica<span>Forge</span></div>
+    <span class="footer-copy">© 2025 LexicaForge. Dictionary data from <a href="https://dictionaryapi.dev" style="color:rgba(247,244,238,0.5)">Free Dictionary API</a>.</span>
+  </div>
+</footer>
+
+<!-- PRIVACY MODAL -->
+<div class="modal-overlay" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title" onclick="if(event.target===this)closeModal('privacy')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modal-privacy-title">Privacy Policy</h2>
+      <button class="modal-close" onclick="closeModal('privacy')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Effective Date:</strong> January 1, 2025</p>
+      <h3>1. Information We Collect</h3>
+      <p>LexicaForge does not require account creation and collects no personally identifiable information. We may collect anonymous usage data (such as pages visited and features used) through standard web analytics to improve our service.</p>
+      <h3>2. Cookies</h3>
+      <p>We may use cookies for analytics purposes (e.g., Google Analytics) and for displaying advertising. You can disable cookies in your browser settings at any time.</p>
+      <h3>3. Advertising</h3>
+      <p>LexicaForge may display third-party advertisements. These advertisers may use cookies or similar technologies to serve relevant ads. We do not control the data practices of third-party advertisers.</p>
+      <h3>4. Third-Party APIs</h3>
+      <p>Word definitions are fetched from the Free Dictionary API (dictionaryapi.dev). Your search queries are sent to this API to retrieve results. Please refer to their privacy policy for more information.</p>
+      <h3>5. Data Retention</h3>
+      <p>We do not store your search queries on our servers. All word lookups are processed in your browser and sent directly to the dictionary API.</p>
+      <h3>6. Children's Privacy</h3>
+      <p>LexicaForge is not directed at children under 13. We do not knowingly collect personal information from children.</p>
+      <h3>7. Contact</h3>
+      <p>For privacy questions, contact us at: privacy@lexicaforge.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS MODAL -->
+<div class="modal-overlay" id="modal-terms" role="dialog" aria-modal="true" aria-labelledby="modal-terms-title" onclick="if(event.target===this)closeModal('terms')">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modal-terms-title">Terms of Use</h2>
+      <button class="modal-close" onclick="closeModal('terms')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Effective Date:</strong> January 1, 2025</p>
+      <h3>1. Acceptance of Terms</h3>
+      <p>By accessing and using LexicaForge ("the Service"), you accept and agree to be bound by these Terms of Use. If you do not agree, please do not use the Service.</p>
+      <h3>2. Use of the Service</h3>
+      <p>LexicaForge is provided for personal, non-commercial use. You may not use the Service to scrape, copy, or redistribute our tools, content, or data in bulk without written permission.</p>
+      <h3>3. Intellectual Property</h3>
+      <p>All design, branding, and original content on LexicaForge is the property of LexicaForge and may not be reproduced without permission. Word definitions are provided by the Free Dictionary API under their respective licenses.</p>
+      <h3>4. Disclaimer of Warranties</h3>
+      <p>The Service is provided "as is" without any warranty. We do not guarantee the accuracy, completeness, or suitability of any word results or definitions.</p>
+      <h3>5. Limitation of Liability</h3>
+      <p>LexicaForge shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the Service.</p>
+      <h3>6. Advertising</h3>
+      <p>The Service may contain advertising. Advertisements do not constitute endorsement of any product or service by LexicaForge.</p>
+      <h3>7. Changes to Terms</h3>
+      <p>We reserve the right to modify these Terms at any time. Continued use of the Service after changes constitutes acceptance of the new Terms.</p>
+      <h3>8. Contact</h3>
+      <p>For questions about these Terms, contact: legal@lexicaforge.com</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SCRABBLE VALUES ──────────────────────────────────────────
+const SV={A:1,E:1,I:1,O:1,U:1,L:1,N:1,S:1,T:1,R:1,D:2,G:2,B:3,C:3,M:3,P:3,F:4,H:4,V:4,W:4,Y:4,K:5,J:8,X:8,Q:10,Z:10};
+function scrabble(w){return w.toUpperCase().split('').reduce((s,c)=>s+(SV[c]||0),0)}
+
+// ── BUILT-IN WORD LIST (common 3-7 letter words for unscramble/anagram) ──
+// We use Free Dictionary API for validation + definitions, and our local list for candidate generation
+const WORD_LIST_3=[
+"the","and","for","are","but","not","you","all","can","her","was","one","our","out","day","get","has","him","his","how","its","may","new","now","old","see","two","way","who","any","boy","did","end","far","few","got","had","hat","hey","hit","hot","how","hug","ice","job","joy","key","kid","let","lit","log","lot","low","man","men","mix","mom","mud","net","nor","odd","off","oil","own","pay","pit","pop","pot","put","ran","raw","red","rid","rip","rot","row","run","sad","sat","set","shy","sit","six","sky","sob","son","sow","sum","sun","ten","tie","tin","tip","toe","ton","too","top","toy","try","tub","use","van","war","web","wed","wet","why","win","wit","wok","won","yam","yes","yet","zoo","age","ago","aid","aim","air","ant","ape","apt","arc","arm","art","ash","ask","ate","bad","bag","ban","bar","bat","bay","bed","beg","bet","bid","big","bit","bow","box","bug","bun","bus","but","buy","cab","cap","car","cat","cup","cut","dam","den","dew","dig","dim","dip","dog","dot","dry","dug","dye","ear","eat","egg","elf","elk","elm","emu","era","eve","eye","fan","fat","fig","fin","fit","fly","fog","for","fox","fur","gap","gas","gem","gin","gnu","god","gum","gun","gut","gym","ham","hay","hen","hew","hex","hip","hoe","hop","hub","hug","hum","hut","ill","imp","ink","inn","ion","ire","ivy","jab","jam","jar","jaw","jay","jot","jug","jut","keg","ken","kin","lab","lag","lap","law","lay","lea","led","leg","lid","lip","lob","lop","low","lug","mad","map","mar","mat","mew","mob","mop","mow","mud","mug","nab","nap","nay","nit","nob","nod","nor","nun","oak","oar","ode","ore","orb","our","out","owe","owl","own","pad","pan","pap","par","pat","paw","pea","peg","pen","pep","per","pet","pie","pig","pin","pit","ply","pod","pop","pox","pro","pry","pub","pun","pup","pus","rad","rag","ram","rap","rat","ray","rib","rim","rub","rug","rum","rut","rye","sac","sag","sap","sat","sax","say","sea","sew","sex","ski","sly","sob","sod","spa","spy","sty","sub","sue","sup","tab","tad","tap","tar","tax","tea","ten","tic","tug","tux","urn","vat","vim","vow","wad","wag","was","wax","wee","wig","wok","wow","yak","yap","yew","zip","zit"];
+const WORD_LIST_4=["able","also","area","back","ball","band","base","bath","bear","beat","been","bell","best","bill","bird","blow","blue","boat","body","bomb","bone","book","born","both","bull","burn","call","came","came","care","case","cash","cast","cell","chat","chip","cite","city","clap","clue","coal","coat","code","coin","cold","come","cool","cope","cord","core","corn","cost","coup","crab","crew","crop","cube","cure","curl","dame","dark","data","date","dawn","days","dead","deal","dean","dear","deck","deed","deep","deny","desk","diet","dirt","disk","dive","dock","does","dome","done","door","dose","down","draw","drew","drop","drug","drum","dual","duck","dump","dunk","dust","each","earn","ease","east","edge","else","emit","epic","ergo","even","ever","evil","exam","exit","face","fact","fade","fail","fair","fake","fall","fame","farm","fast","fate","feel","feet","fell","felt","file","fill","film","find","fire","firm","fish","fist","five","flag","flat","flaw","flea","flew","flip","flog","flow","foam","fold","folk","fond","food","fool","foot","ford","fore","fork","form","fort","foul","four","free","from","fuel","full","fund","fuse","fuzz","gain","gale","game","gang","gaze","gear","gene","gift","gist","give","glad","glow","glue","goal","goes","gold","golf","gone","good","gore","gown","grab","gram","grew","grid","grin","grip","grit","grow","gulf","gust","hack","hail","half","hall","halt","hand","hang","hard","harm","hate","have","haze","head","heal","heap","heat","heel","heir","held","help","here","hero","hide","high","hill","hint","hire","hive","hold","hole","holy","home","hood","hoop","hope","horn","hose","host","hour","huge","hulk","hull","hung","hunt","hurt","husk","icon","idea","idle","iris","item","jack","jail","jest","jolt","jump","just","keen","kept","kick","kill","kind","king","knob","knot","know","lack","lady","laid","land","lane","last","late","lawn","lead","lean","leap","lend","lens","less","levy","lick","life","lift","like","lime","line","link","lion","list","live","load","loan","lock","loft","long","look","loop","lord","lore","lose","loss","lost","loud","lout","luck","lump","lure","lurk","lust","made","mail","main","make","male","malt","mane","many","mark","mass","mast","meal","mean","meat","melt","memo","menu","mere","mesh","mild","milk","mill","mine","mint","miss","mist","mode","monk","mono","mood","moon","more","most","move","much","murk","must","myth","nail","name","navy","need","nest","next","nice","nine","node","none","noon","norm","nose","note","noun","nude","null","numb","oath","obey","once","only","onto","open","oral","over","pace","pack","page","paid","pail","pain","pale","palm","park","part","pass","past","path","pave","peak","peel","peer","pelt","perk","pied","pile","pill","pine","pink","pipe","pity","plan","play","plea","plot","plow","plug","plum","plus","poem","poet","poll","polo","pond","pool","pore","pork","port","pose","pour","pray","prey","prop","pull","pump","pure","push","race","rack","raft","rage","raid","rail","rain","rake","rank","rare","rate","read","real","ream","reed","reef","reel","rent","rest","rice","rich","ride","ring","rink","riot","rise","risk","road","roam","roar","robe","role","roll","rook","root","rope","rose","rout","rule","rush","rust","sage","sail","sake","sale","salt","same","sand","sane","sang","sank","seal","seam","seat","seed","seek","seem","seen","self","sell","send","sent","shed","shin","ship","shoe","shot","show","shut","sick","side","sigh","silk","sill","sine","sing","sink","site","size","skin","skip","slab","slam","slap","slat","slid","slim","slip","slot","slow","slug","slum","slur","snap","snob","snow","soak","soap","sock","soft","sole","some","song","soon","sore","sort","soul","sour","span","spin","spit","spot","stab","star","stay","stem","step","stew","stir","stop","stub","such","suit","sulk","sure","surf","swam","swap","sway","swim","swore","tale","talk","tall","tang","tank","tape","task","taut","team","tear","tell","tent","term","test","than","that","them","then","they","thin","this","thorn","tidy","tile","till","time","tire","toad","toll","told","tone","tong","took","tore","torn","toss","tour","town","tram","trap","tree","trek","trim","trio","trip","trod","trot","true","tube","tuck","tune","turf","tusk","twin","type","ugly","undo","unit","upon","urge","vague","vale","vane","vast","veil","vein","verb","very","vibe","view","vine","visa","void","vote","wade","wake","walk","wall","wand","ward","warm","warn","warp","wart","wash","wave","weak","wear","weld","well","went","were","west","what","when","whim","whip","whom","wide","wild","will","wilt","wind","wine","wing","wink","wire","wise","wish","with","woke","wolf","wood","word","wore","worm","worn","wove","wrap","wren","writ","yard","yarn","year","yell","your","zero","zone","zoom"];
+const WORD_LIST_5=["about","above","abuse","actor","acute","admit","adopt","after","again","agent","agree","ahead","alarm","album","alert","alive","alley","allow","alone","along","alter","angel","anger","angle","angry","annex","apart","apple","apply","arena","argue","arise","array","aside","asset","attic","audio","audit","avoid","award","aware","awful","baker","basic","basis","beach","began","begin","being","below","bench","berry","birth","black","blade","blame","bland","blank","blast","blaze","bleed","bless","blind","block","blood","bloom","blown","board","boost","bound","brace","brain","brand","brave","brawl","bread","break","breed","brick","bride","brief","bring","broad","broke","brook","broom","brown","brush","build","built","bunch","burst","buyer","cabin","camel","candy","cause","chain","chair","chalk","cheap","cheat","check","cheek","cheer","chess","chest","chief","china","chord","civic","civil","claim","class","clean","clear","clerk","click","cliff","climb","cling","clock","clone","close","cloth","cloud","clown","coast","comet","comic","comma","coral","could","count","covet","cover","crack","craft","crank","crash","crazy","cream","creek","crime","crest","cross","crowd","crown","cruel","crush","curve","cycle","daily","dance","deals","death","debut","decay","decoy","delay","delta","depot","depth","derby","dirty","disco","dodge","doing","doubt","dough","dowdy","draft","drama","drank","dread","dream","dress","dried","drift","drill","drink","drive","drone","drove","drunk","dryer","dying","eager","eagle","early","earth","eight","elite","empty","ended","enemy","enjoy","enter","envoy","equal","error","essay","event","every","exact","exist","extra","fable","facet","faith","false","fancy","fault","favor","feast","fence","fever","fewer","field","fight","final","first","fixed","flame","flare","flash","flesh","float","flock","floor","floss","flour","fluid","flush","flute","focal","focus","force","forge","found","frame","frank","fraud","fresh","front","frost","froze","fruit","fully","funny","gamer","ghost","giant","given","glare","glass","gleam","glimpse","globe","glory","going","grace","grade","grain","grand","grant","grass","grave","great","green","greet","grief","grill","groan","gross","group","grove","grown","guard","guess","guest","guide","guile","guise","gusto","habit","happy","harsh","haste","haunt","haute","haven","heart","heavy","hence","hinge","horse","hotel","hover","human","humor","hurry","ideal","image","imply","imply","index","inner","input","inter","intro","invent","irony","issue","ivory","jewel","joint","joker","juice","juicy","karma","kneel","knelt","knife","knock","known","label","lance","large","later","lathe","layer","learn","lease","least","leave","legal","level","light","limit","liner","lingo","liven","liver","local","lodge","logic","loose","lower","lower","loyal","lucky","lunar","lying","magic","major","maker","manor","maple","march","mayor","media","merry","metal","metro","midst","might","mimic","minor","minus","model","money","month","morph","motor","motto","mould","mount","mount","mouse","mouth","movie","muddy","music","naive","nasal","naval","needy","never","night","ninth","noble","noise","north","noted","novel","occur","ocean","offer","olive","onset","other","outer","owner","oxide","ozone","paint","panic","paper","party","pasta","patch","pause","peace","peach","penal","perch","phase","phone","photo","piano","pilot","pixie","pixel","pizza","place","place","plane","plant","plaza","plead","pluck","plumb","point","polar","pound","power","pride","prime","print","prior","prize","probe","proof","proud","prove","prowl","proxy","psalm","punch","puppy","queen","query","quest","queue","quick","quiet","quite","quota","quote","radar","radio","raise","rally","range","rapid","ratio","reach","ready","realm","rebel","refer","reign","relax","repay","repel","reply","resin","rigid","risky","river","rivet","robin","robot","rocky","roman","rough","round","route","royal","rugby","ruler","rural","rusty","sadly","saint","salad","sandy","sauce","savvy","scale","scare","scene","scent","scoff","scoop","scope","score","scout","screw","sedan","sense","serum","seven","shade","shaft","shake","shaky","shall","shame","shape","share","sharp","shelf","shell","shift","shine","shiny","shire","short","shout","sight","silly","since","sixth","sixty","sized","skill","skull","slack","slave","sleep","sleet","slice","slide","slime","sling","sloth","slump","small","smack","smart","smell","smile","smirk","smite","smock","smoke","solid","solve","space","spare","spark","spawn","speak","spear","speed","spend","spill","spine","spite","split","spray","squad","squat","stack","staff","stage","stain","stale","stall","stand","stark","stash","steak","steal","steel","steep","steer","stick","stiff","still","sting","stock","stone","stood","store","story","stout","strap","straw","stray","strip","stuck","study","stuff","stung","style","sugar","sweet","swift","sword","swore","table","taunt","tease","theme","there","thick","thing","think","third","thorn","those","three","threw","throw","thumb","thump","tiger","tight","timer","tired","title","today","token","toned","total","touch","tough","towel","tower","toxic","trace","track","trade","trail","train","trait","tramp","trash","treat","trial","tribe","trick","tried","trite","troop","truck","truly","trump","trunk","trust","truth","tumor","tutor","twist","tying","ultra","under","union","until","upper","upset","urban","usual","utter","valor","value","valve","vault","video","vigor","viral","virus","visit","vista","vital","vivid","voice","vouch","vowel","wager","waste","watch","water","weave","weird","whale","wheat","where","which","while","white","whole","whose","wider","width","witty","woman","women","world","worry","worse","worst","worth","wound","wrath","write","wrong","yacht","yield","young","youth","yours","zebra"];
+
+// Build a single Set for fast lookup
+const VALID_WORDS = new Set([...WORD_LIST_3,...WORD_LIST_4,...WORD_LIST_5]);
+
+// ── HELPERS ─────────────────────────────────────────────────
+function letterFreq(str){
+  const f={};
+  for(const c of str.toUpperCase()) f[c]=(f[c]||0)+1;
+  return f;
+}
+function canMakeWord(word, letters){
+  const lf=letterFreq(letters);
+  for(const c of word.toUpperCase()){
+    if(!lf[c]) return false;
+    lf[c]--;
+  }
+  return true;
+}
+function patternMatch(word, pattern){
+  const p='^'+pattern.toUpperCase().replace(/\?/g,'[A-Z]').replace(/\*/g,'[A-Z]*')+'$';
+  return new RegExp(p).test(word.toUpperCase());
+}
+
+// ── TILE DISPLAY ─────────────────────────────────────────────
+function updateTiles(val,tid){
+  const el=document.getElementById(tid);
+  const letters=val.toUpperCase().replace(/[^A-Z]/g,'').slice(0,12);
+  el.innerHTML=letters.split('').map(l=>
+    `<div class="tile">${l}<span class="tile-score">${SV[l]||0}</span></div>`
+  ).join('');
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────────
+function switchTab(name, btn){
+  document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+  document.getElementById('panel-'+name).classList.add('active');
+  if(btn){btn.classList.add('active');btn.setAttribute('aria-selected','true')}
+  else{
+    const b=document.getElementById('tab-'+name);
+    if(b){b.classList.add('active');b.setAttribute('aria-selected','true')}
+  }
+}
+function switchTabByName(name){switchTab(name,null);document.getElementById('tool').scrollIntoView({behavior:'smooth'});return false}
+
+// ── QUICK SEARCH ─────────────────────────────────────────────
+function quickSearch(tool,word){
+  switchTab(tool,null);
+  const inp=document.getElementById('inp-'+tool);
+  inp.value=word;
+  if(tool==='unscramble') updateTiles(word,'tiles-unscramble');
+  document.getElementById('tool').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>solve(tool),300);
+  return false;
+}
+
+// ── LOADING STATE ────────────────────────────────────────────
+function setLoading(tool,on){
+  document.getElementById('btn-'+tool).disabled=on;
+  document.getElementById('spin-'+tool).style.display=on?'block':'none';
+  document.getElementById('btxt-'+tool).textContent=on?'Working...':{
+    unscramble:'Unscramble →',anagram:'Find Anagrams →',wordfinder:'Find Words →',define:'Define Word →'
+  }[tool];
+}
+
+// ── MAIN SOLVE ───────────────────────────────────────────────
+async function solve(tool){
+  const input=document.getElementById('inp-'+tool).value.trim().toUpperCase().replace(/\s+/g,'');
+  if(!input) return;
+  setLoading(tool,true);
+  const el=document.getElementById('res-'+tool);
+  el.innerHTML='<div class="empty-state"><p style="color:var(--muted);font-size:13px">Searching…</p></div>';
+
+  if(tool==='define'){
+    await solveDefine(input.toLowerCase(),el);
+  } else if(tool==='unscramble'){
+    solveUnscramble(input,el);
+  } else if(tool==='anagram'){
+    solveAnagram(input,el);
+  } else if(tool==='wordfinder'){
+    solveWordFinder(input,el);
+  }
+  setLoading(tool,false);
+}
+
+// ── UNSCRAMBLE ───────────────────────────────────────────────
+function solveUnscramble(letters,el){
+  const lenFilter=document.getElementById('len-unscramble').value;
+  const found=[];
+  for(const w of VALID_WORDS){
+    if(lenFilter){
+      const min=parseInt(lenFilter);
+      if(lenFilter==='7'&&w.length<7) continue;
+      else if(lenFilter!=='7'&&w.length!==min) continue;
+    }
+    if(w.length>=2 && w.length<=letters.length && canMakeWord(w,letters)) found.push(w);
+  }
+  if(!found.length){
+    el.innerHTML=`<div class="empty-state"><p>No words found for <strong>${letters}</strong>.<br>Try removing the length filter or check your letters.</p></div>`;
+    return;
+  }
+  found.sort((a,b)=>b.length-a.length||a.localeCompare(b));
+  const groups={};
+  found.forEach(w=>{const l=w.length;if(!groups[l])groups[l]=[];groups[l].push(w)});
+  const html=Object.keys(groups).sort((a,b)=>b-a).map(len=>`
+    <div class="length-group">
+      <div class="length-label">${len}-letter words &nbsp;(${groups[len].length})</div>
+      <div class="words-grid">${groups[len].map(w=>{const s=scrabble(w);return`<span class="word-chip${s>=8?' high-score':''}" onclick="defineInline('${w}','unscramble')" title="Scrabble: ${s}pts">${w.toUpperCase()} <small class="score-badge">${s}</small></span>`}).join('')}</div>
+    </div>`).join('');
+  el.innerHTML=`<div class="results-header"><span class="results-title">${found.length} word${found.length!==1?'s':''} found</span><span class="results-meta">from "${letters}" · click to define</span></div>${html}<div class="def-card" id="idef-unscramble" style="display:none"></div>`;
+}
+
+// ── ANAGRAM ──────────────────────────────────────────────────
+function solveAnagram(letters,el){
+  const fullOnly=document.getElementById('mode-anagram').value==='full';
+  const sorted=letters.split('').sort().join('');
+  const found=[];
+  for(const w of VALID_WORDS){
+    if(fullOnly){
+      if(w.length===letters.length && w.toUpperCase().split('').sort().join('')===sorted) found.push(w);
+    } else {
+      if(w.length>=2 && w.length<=letters.length && canMakeWord(w,letters)) found.push(w);
+    }
+  }
+  found.sort((a,b)=>b.length-a.length||a.localeCompare(b));
+  if(!found.length){
+    el.innerHTML=`<div class="empty-state"><p>No ${fullOnly?'full ':''}anagrams found for <strong>${letters}</strong>.</p></div>`;
+    return;
+  }
+  const chips=found.map(w=>{const s=scrabble(w);return`<span class="word-chip${s>=8?' high-score':''}" onclick="defineInline('${w}','anagram')" title="Scrabble: ${s}pts">${w.toUpperCase()} <small class="score-badge">${s}</small></span>`}).join('');
+  el.innerHTML=`<div class="results-header"><span class="results-title">${found.length} anagram${found.length!==1?'s':''}</span><span class="results-meta">click to define</span></div><div class="words-grid">${chips}</div><div class="def-card" id="idef-anagram" style="display:none"></div>`;
+}
+
+// ── WORD FINDER ──────────────────────────────────────────────
+function solveWordFinder(pattern,el){
+  if(!pattern.match(/^[A-Z\?\*]+$/i)){
+    el.innerHTML=`<div class="error-msg">Only use letters, ? and * in your pattern.</div>`;return;
+  }
+  const found=[];
+  for(const w of VALID_WORDS){
+    if(patternMatch(w,pattern)) found.push(w);
+  }
+  found.sort((a,b)=>a.length-b.length||a.localeCompare(b));
+  if(!found.length){
+    el.innerHTML=`<div class="empty-state"><p>No words match pattern <strong>${pattern}</strong>.</p></div>`;return;
+  }
+  const chips=found.map(w=>{const s=scrabble(w);return`<span class="word-chip${s>=8?' high-score':''}" onclick="defineInline('${w}','wordfinder')" title="Scrabble: ${s}pts">${w.toUpperCase()} <small class="score-badge">${s}</small></span>`}).join('');
+  el.innerHTML=`<div class="results-header"><span class="results-title">${found.length} match${found.length!==1?'es':''}</span><span class="results-meta">for pattern "${pattern}" · click to define</span></div><div class="words-grid">${chips}</div><div class="def-card" id="idef-wordfinder" style="display:none"></div>`;
+}
+
+// ── DEFINE (Free Dictionary API) ─────────────────────────────
+async function solveDefine(word,el){
+  try{
+    const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    if(!r.ok) throw new Error('Word not found');
+    const data=await r.json();
+    el.innerHTML=renderDef(data[0]);
+  }catch(e){
+    el.innerHTML=`<div class="error-msg">Could not find a definition for <strong>${word.toUpperCase()}</strong>. Please check the spelling.</div>`;
+  }
+}
+
+// ── INLINE DEFINE (click chip) ────────────────────────────────
+async function defineInline(word,panel){
+  const card=document.getElementById('idef-'+panel);
+  if(!card) return;
+  card.style.display='block';
+  card.innerHTML=`<div style="color:var(--muted);font-size:13px">Looking up <strong>${word.toUpperCase()}</strong>…</div>`;
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  try{
+    const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`);
+    if(!r.ok) throw new Error();
+    const data=await r.json();
+    card.innerHTML=renderDef(data[0]);
+  }catch(e){
+    card.innerHTML=`<div style="font-size:13px;color:var(--muted)">No dictionary entry found for <strong>${word}</strong>.</div>`;
+  }
+}
+
+function renderDef(entry){
+  const word=entry.word||'';
+  const phonetic=(entry.phonetic||(entry.phonetics||[]).find(p=>p.text)?.text)||'';
+  const score=scrabble(word);
+  const meanings=(entry.meanings||[]).slice(0,3).map(m=>{
+    const defs=(m.definitions||[]).slice(0,2).map(d=>{
+      const ex=d.example?`<div class="def-example">"${d.example}"</div>`:'';
+      return `<div class="def-meaning">${d.definition||''}${ex}</div>`;
+    }).join('');
+    const syns=(m.synonyms||[]).slice(0,5);
+    const synHtml=syns.length?`<div class="def-synonyms">Synonyms: ${syns.map(s=>`<a onclick="quickSearch('define','${s}')">${s}</a>`).join(', ')}</div>`:'';
+    return `<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px">${m.partOfSpeech||''}</div>${defs}${synHtml}</div>`;
+  }).join('');
+  const source=(entry.sourceUrls||[])[0]?`<div class="def-source">Source: <a href="${entry.sourceUrls[0]}" target="_blank" rel="noopener">Free Dictionary</a></div>`:'';
+  return `<div class="def-word-title">${word.toUpperCase()}</div>
+    <div class="def-meta">${phonetic?`<span class="def-phonetic">${phonetic}</span>`:''}</div>
+    ${meanings}
+    <span class="scrabble-pill">Scrabble: ${score} pts</span>
+    ${source}`;
+}
+
+// ── MODAL ────────────────────────────────────────────────────
+function openModal(name){
+  document.getElementById('modal-'+name).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(name){
+  document.getElementById('modal-'+name).classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal('privacy');closeModal('terms')}});
+</script>
+</body>
+</html>
